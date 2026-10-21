@@ -6,6 +6,7 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) {
+    	StudyService studyService = new StudyService();
     	Scanner scanner = new Scanner(System.in);
     	int choice;
     	
@@ -23,11 +24,30 @@ public class Main {
     	    choice = scanner.nextInt();
     	    switch (choice) {
     	    case 1:
-    	        System.out.println("Study Session Management selected.");
+    	    	System.out.print("Enter session ID: ");
+    	    	int id = scanner.nextInt();
+    	    	scanner.nextLine();
+
+    	    	System.out.print("Enter skill: ");
+    	    	String skill = scanner.nextLine();
+
+    	    	System.out.print("Enter date: ");
+    	    	String date = scanner.nextLine();
+
+    	    	System.out.print("Enter duration in minutes: ");
+    	    	int duration = scanner.nextInt();
+    	    	scanner.nextLine();
+
+    	    	System.out.print("Enter notes: ");
+    	    	String notes = scanner.nextLine();
+    	    	
+    	    	StudySession session = new StudySession(id, skill, date, duration, notes);
+    	    	studyService.addSession(session);
     	        break;
 
     	    case 2:
-    	        System.out.println("Practice Score Tracking selected.");
+//    	        System.out.println("Practice Score Tracking selected.");
+    	    	studyService.viewSessions();
     	        break;
 
     	    case 3:
@@ -46,6 +66,7 @@ public class Main {
     	scanner.close();
 
     	System.out.println("You selected: " + choice);
+    	
     	
     }
 }
