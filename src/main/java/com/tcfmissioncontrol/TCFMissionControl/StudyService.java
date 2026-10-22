@@ -29,5 +29,46 @@ public class StudyService {
 //		        System.out.println("--------------------");
 //	    }
 	}
+	public StudySession findSessionById(int id) {
+	    for (StudySession session : sessions) {
+	        if (session.getId() == id) {
+	            return session;
+	        }
+	    }
+
+	    return null;
+	}
+	
+	public boolean updateSession(
+	        int id,
+	        String newSkill,
+	        String newDate,
+	        int newDuration,
+	        String newNotes
+	) {
+	    StudySession session = findSessionById(id);
+
+	    if (session == null) {
+	        return false;
+	    }
+
+	    session.setSkill(newSkill);
+	    session.setDate(newDate);
+	    session.setDuration(newDuration);
+	    session.setNotes(newNotes);
+
+	    return true;
+	}
+	
+	public boolean deleteSession(int id) {
+	    StudySession session = findSessionById(id);
+
+	    if (session == null) {
+	        return false;
+	    }
+
+	    sessions.remove(session);
+	    return true;
+	}
 
 }
