@@ -46,5 +46,28 @@ public class ScoreService {
 	        System.out.println("--------------------");
 	    }
 	}
+	
+	public double getAverageScore(String skill) {
+	    List<Integer> skillScores = scores.get(skill);
+
+	    if (skillScores == null || skillScores.isEmpty()) {
+	        return 0;
+	    }
+
+	    int total = 0;
+
+	    for (int score : skillScores) {
+	        total += score;
+	    }
+
+	    return (double) total / skillScores.size();
+	}
+	
+	public void viewAverageScores() {
+	    System.out.println("Reading Average: " + getAverageScore("Reading"));
+	    System.out.println("Listening Average: " + getAverageScore("Listening"));
+	    System.out.println("Speaking Average: " + getAverageScore("Speaking"));
+	    System.out.println("Writing Average: " + getAverageScore("Writing"));
+	}
 
 }
