@@ -1,12 +1,11 @@
 package com.tcfmissioncontrol.TCFMissionControl;
 import java.util.Scanner;
 
-/**
- * Hello world!
- */
+
 public class Main {
     public static void main(String[] args) {
     	StudyService studyService = new StudyService();
+    	ScoreService scoreService = new ScoreService();
     	Scanner scanner = new Scanner(System.in);
     	int choice;
     	
@@ -29,7 +28,7 @@ public class Main {
     	    }
 
     	    case 2: {
-    	    	System.out.print("case 2");
+    	    	managePracticeScores(scanner, scoreService);
     	        break;
     	    }
 
@@ -201,6 +200,101 @@ public class Main {
             System.out.println("Study session not found.");
         }
     }
+    
+//    Feature 2: REcord and view practice scores
+    
+    private static void managePracticeScores(
+            Scanner scanner,
+            ScoreService scoreService
+    ) {
+        int scoreChoice;
+
+        do {
+            System.out.println("\nPRACTICE SCORE TRACKING");
+            System.out.println("1. Record Practice Score");
+            System.out.println("2. View Practice Scores");
+            System.out.println("3. Return to Main Menu");
+
+            System.out.print("Enter your choice: ");
+            scoreChoice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (scoreChoice) {
+                case 1: {
+                    recordPracticeScore(scanner, scoreService);
+                    break;
+                }
+
+                case 2: {
+                    scoreService.viewScores();
+                    break;
+                }
+
+                case 3: {
+                    System.out.println("Returning to main menu...");
+                    break;
+                }
+
+                default: {
+                    System.out.println(
+                            "Invalid choice. Please select an option from 1 to 3."
+                    );
+                }
+            }
+
+        } while (scoreChoice != 3);
+    }
+    
+    private static void recordPracticeScore(
+            Scanner scanner,
+            ScoreService scoreService
+    ) {
+        System.out.println("\nPRACTICE SCORE TRACKING");
+        System.out.println("1. Reading");
+        System.out.println("2. Listening");
+        System.out.println("3. Speaking");
+        System.out.println("4. Writing");
+
+        System.out.print("Select a skill: ");
+        int skillChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        String skill;
+
+        switch (skillChoice) {
+            case 1:
+                skill = "Reading";
+                break;
+
+            case 2:
+                skill = "Listening";
+                break;
+
+            case 3:
+                skill = "Speaking";
+                break;
+
+            case 4:
+                skill = "Writing";
+                break;
+
+            default:
+                System.out.println("Invalid skill selection.");
+                return;
+        }
+
+        System.out.print("Enter practice score: ");
+        int score = scanner.nextInt();
+        scanner.nextLine();
+
+        PracticeScore practiceScore = new PracticeScore(skill, score);
+
+        scoreService.addScore(practiceScore);
+
+        System.out.println("Practice score recorded successfully.");
+    }
 }
+
+
 
 
