@@ -287,9 +287,9 @@ public class Main {
         int score = scanner.nextInt();
         scanner.nextLine();
 
-        PracticeScore practiceScore = new PracticeScore(skill, score);
+//        PracticeScore practiceScore = new PracticeScore(skill, score);
 
-        scoreService.addScore(practiceScore);
+        scoreService.addScore(skill, score);
 
         System.out.println("Practice score recorded successfully.");
     }
