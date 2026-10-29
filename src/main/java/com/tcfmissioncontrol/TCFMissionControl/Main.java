@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
     	StudyService studyService = new StudyService();
     	ScoreService scoreService = new ScoreService();
+    	ProgressService progressService = new ProgressService(studyService, scoreService);
     	Scanner scanner = new Scanner(System.in);
     	int choice;
     	
@@ -15,7 +16,7 @@ public class Main {
     	    System.out.println("      TCF MISSION CONTROL");
     	    System.out.println("==============================");
     	    System.out.println("1. Manage Study Sessions");
-    	    System.out.println("2. Record Practice Score");
+    	    System.out.println("2. Manage Practice");
     	    System.out.println("3. View Progress Report");
     	    System.out.println("4. Exit");
 
@@ -33,9 +34,7 @@ public class Main {
     	    }
 
     	    case 3: {
-    	        System.out.print("case 3 ");
-    	        
-
+    	    	progressService.viewProgressReport();
     	        break;
     	    }
 

@@ -70,5 +70,19 @@ public class StudyService {
 	    sessions.remove(session);
 	    return true;
 	}
+	
+	public int getTotalSessions() {
+	    return sessions.size();
+	}
+	
+	public int getTotalStudyTime() {
+	    int totalMinutes = 0;
+
+	    for (StudySession session : sessions) {
+	        totalMinutes += session.getDuration();
+	    }
+
+	    return totalMinutes;
+	}
 
 }
