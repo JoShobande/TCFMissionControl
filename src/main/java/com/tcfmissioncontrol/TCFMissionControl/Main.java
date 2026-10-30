@@ -20,8 +20,12 @@ public class Main {
     	    System.out.println("3. View Progress Report");
     	    System.out.println("4. Exit");
 
-    	    System.out.print("Enter your choice: ");
-    	    choice = scanner.nextInt(); 
+    	    choice = InputValidator.readIntInRange(
+    	            scanner,
+    	            "Enter your choice: ",
+    	            1,
+    	            4
+    	    ); 
     	    switch (choice) {
 
     	    case 1: {
@@ -43,11 +47,6 @@ public class Main {
     	        break;
     	    }
 
-    	    default: {
-    	        System.out.println(
-    	                "Invalid choice. Please select an option from 1 to 4."
-    	        );
-    	    }
     	}
 
     	} while (choice != 4);
@@ -73,8 +72,12 @@ public class Main {
             System.out.println("5. Return to Main Menu");
 
             System.out.print("Enter your choice: ");
-            studyChoice = scanner.nextInt();
-            scanner.nextLine();
+            studyChoice = InputValidator.readIntInRange(
+                    scanner,
+                    "Enter your choice: ",
+                    1,
+                    5
+            );
 
             switch (studyChoice) {
 
@@ -102,12 +105,6 @@ public class Main {
                     System.out.println("Returning to main menu...");
                     break;
                 }
-
-                default: {
-                    System.out.println(
-                            "Invalid choice. Please select an option from 1 to 5."
-                    );
-                }
             }
 
         } while (studyChoice != 5);
@@ -123,23 +120,56 @@ public class Main {
     	System.out.println("3. Speaking");
     	System.out.println("4. Writing");
 
-    	System.out.print("Enter your choice: ");
-    	int skillChoice = scanner.nextInt();
-    	scanner.nextLine();
+    	int skillChoice = InputValidator.readIntInRange(
+    	        scanner,
+    	        "Enter your choice: ",
+    	        1,
+    	        4
+    	);
     	
-    	System.out.print("Enter session ID: ");
-    	int id = scanner.nextInt();
-    	scanner.nextLine();
+    	int id;
 
-    	System.out.print("Enter date: ");
-    	String date = scanner.nextLine();
+    	while (true) {
 
-    	System.out.print("Enter duration in minutes: ");
-    	int duration = scanner.nextInt();
-    	scanner.nextLine();
+    	    id = InputValidator.readInt(
+    	            scanner,
+    	            "Enter session ID (or 0 to return): "
+    	    );
 
-    	System.out.print("Enter notes: ");
-    	String notes = scanner.nextLine();
+    	    if (id == 0) {
+    	        return;
+    	    }
+
+    	    if (id < 0) {
+    	        System.out.println(
+    	                "Session ID must be greater than 0."
+    	        );
+    	        continue;
+    	    }
+
+    	    try {
+    	        studyService.validateUniqueSessionId(id);
+    	        break;
+
+    	    } catch (DuplicateSessionIdException e) {
+    	        System.out.println(e.getMessage());
+    	    }
+    	}
+  
+    	String date = InputValidator.readValidDate(
+    	        scanner,
+    	        "Enter date (YYYY-MM-DD): "
+    	);
+
+    	int duration = InputValidator.readDuration(
+    	        scanner,
+    	        "Enter duration in minutes: "
+    	);
+
+    	String notes = InputValidator.readNotes(
+    	        scanner,
+    	        "Enter notes: "
+    	);
 
         StudySession session;
 
@@ -159,48 +189,88 @@ public class Main {
             case 4:
                 session = new WritingSession(id, date, duration, notes);
                 break;
-
             default:
-                System.out.println("Invalid skill selection.");
                 return;
         }
-        studyService.addSession(session);
+        try {
 
-        System.out.println("Study session added successfully.");
+            studyService.addSession(session);
+
+            System.out.println(
+                    "Study session added successfully."
+            );
+
+        } catch (DuplicateSessionIdException e) {
+
+            System.out.println(e.getMessage());
+        }
+
     }
     
     private static void updateStudySession(
             Scanner scanner,
             StudyService studyService
     ) {
-        System.out.print("Enter session ID to update: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
 
-//        System.out.print("Enter new skill: ");
-//        String skill = scanner.nextLine();
-
-        System.out.print("Enter new date: ");
-        String date = scanner.nextLine();
-
-        System.out.print("Enter new duration in minutes: ");
-        int duration = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.print("Enter new notes: ");
-        String notes = scanner.nextLine();
-
-        boolean updated = studyService.updateSession(
-                id,
-                date,
-                duration,
-                notes
+        int id = InputValidator.readPositiveInt(
+                scanner,
+                "Enter session ID to update: "
         );
 
-        if (updated) {
-            System.out.println("Study session updated successfully.");
-        } else {
-            System.out.println("Study session not found.");
+        StudySession session = studyService.findSessionById(id);
+
+        if (session == null) {
+            System.out.println("Session not found.");
+            return;
+        }
+
+        System.out.println("\nWhat would you like to update?");
+        System.out.println("1. Date");
+        System.out.println("2. Duration");
+        System.out.println("3. Notes");
+        System.out.println("4. Return");
+
+        int choice = InputValidator.readIntInRange(
+                scanner,
+                "Enter your choice: ",
+                1,
+                4
+        );
+
+        switch (choice) {
+
+            case 1:
+                String newDate = InputValidator.readValidDate(
+                        scanner,
+                        "Enter new date (YYYY-MM-DD): "
+                );
+
+                session.setDate(newDate);
+                System.out.println("Date updated successfully.");
+                break;
+
+            case 2:
+                int newDuration = InputValidator.readDuration(
+                        scanner,
+                        "Enter new duration in minutes: "
+                );
+
+                session.setDuration(newDuration);
+                System.out.println("Duration updated successfully.");
+                break;
+
+            case 3:
+                String newNotes = InputValidator.readNotes(
+                        scanner,
+                        "Enter new notes: "
+                );
+
+                session.setNotes(newNotes);
+                System.out.println("Notes updated successfully.");
+                break;
+
+            case 4:
+                return;
         }
     }
     
@@ -208,9 +278,11 @@ public class Main {
             Scanner scanner,
             StudyService studyService
     ) {
-        System.out.print("Enter session ID to delete: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+	   int id = InputValidator.readPositiveInt(
+               scanner,
+               "Enter session ID to delete: "
+       );
+
 
         boolean deleted = studyService.deleteSession(id);
 
@@ -227,7 +299,7 @@ public class Main {
             Scanner scanner,
             ScoreService scoreService
     ) {
-        int scoreChoice;
+        int choice;
 
         do {
             System.out.println("\nPRACTICE SCORE TRACKING");
@@ -235,11 +307,14 @@ public class Main {
             System.out.println("2. View Practice Scores");
             System.out.println("3. Return to Main Menu");
 
-            System.out.print("Enter your choice: ");
-            scoreChoice = scanner.nextInt();
-            scanner.nextLine();
+            choice = InputValidator.readIntInRange(
+                    scanner,
+                    "Enter your choice: ",
+                    1,
+                    3
+            );
 
-            switch (scoreChoice) {
+            switch (choice) {
                 case 1: {
                     recordPracticeScore(scanner, scoreService);
                     break;
@@ -255,14 +330,9 @@ public class Main {
                     break;
                 }
 
-                default: {
-                    System.out.println(
-                            "Invalid choice. Please select an option from 1 to 3."
-                    );
-                }
             }
 
-        } while (scoreChoice != 3);
+        } while (choice != 3);
     }
     
     private static void recordPracticeScore(
@@ -275,9 +345,12 @@ public class Main {
         System.out.println("3. Speaking");
         System.out.println("4. Writing");
 
-        System.out.print("Select a skill: ");
-        int skillChoice = scanner.nextInt();
-        scanner.nextLine();
+        int skillChoice = InputValidator.readIntInRange(
+                scanner,
+                "Enter your choice: ",
+                1,
+                4
+        );
 
         String skill;
 
@@ -299,13 +372,15 @@ public class Main {
                 break;
 
             default:
-                System.out.println("Invalid skill selection.");
-                return;
+                throw new IllegalStateException(
+                        "Unexpected skill choice: " + skillChoice
+                );
         }
 
-        System.out.print("Enter practice score: ");
-        int score = scanner.nextInt();
-        scanner.nextLine();
+        int score = InputValidator.readScore(
+                scanner,
+                "Enter score: "
+        );
 
 //        PracticeScore practiceScore = new PracticeScore(skill, score);
 

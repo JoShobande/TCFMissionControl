@@ -10,8 +10,20 @@ public class StudyService {
 		
 	}
 	
-	public void addSession(StudySession session) {
+	public void addSession(StudySession session) throws DuplicateSessionIdException {
+
+	    validateUniqueSessionId(session.getId());
+
 	    sessions.add(session);
+	}
+	
+	public void validateUniqueSessionId(int id) throws DuplicateSessionIdException {
+
+	    if (sessionIdExists(id)) {
+	        throw new DuplicateSessionIdException(
+	                "A session with ID " + id + " already exists."
+	        );
+	    }
 	}
 	
 	public void viewSessions() {
@@ -39,25 +51,64 @@ public class StudyService {
 	    return null;
 	}
 	
-	public boolean updateSession(
-	        int id,
-	        String newDate,
-	        int newDuration,
-	        String newNotes
-	) {
-	    StudySession session = findSessionById(id);
-
-	    if (session == null) {
-	        return false;
-	    }
-
-//	    session.setSkill(newSkill);
-	    session.setDate(newDate);
-	    session.setDuration(newDuration);
-	    session.setNotes(newNotes);
-
-	    return true;
+	public boolean sessionIdExists(int id) {
+	    return findSessionById(id) != null;
 	}
+	
+//	public boolean updateSession(
+//	        int id,
+//	        String newDate,
+//	        int newDuration,
+//	        String newNotes
+//	) {
+//	    StudySession session = findSessionById(id);
+//
+//	    if (session == null) {
+//	        return false;
+//	    }
+//
+////	    session.setSkill(newSkill);
+//	    session.setDate(newDate);
+//	    session.setDuration(newDuration);
+//	    session.setNotes(newNotes);
+//
+//	    return true;
+//	}
+//	public boolean updateSessionDate(int id, String newDate) {
+//
+//	    StudySession session = findSessionById(id);
+//
+//	    if (session == null) {
+//	        return false;
+//	    }
+//
+//	    session.setDate(newDate);
+//	    return true;
+//	}
+	
+//	public boolean updateSessionDuration(int id, int newDuration) {
+//
+//	    StudySession session = findSessionById(id);
+//
+//	    if (session == null) {
+//	        return false;
+//	    }
+//
+//	    session.setDuration(newDuration);
+//	    return true;
+//	}
+	
+//	public boolean updateSessionNotes(int id, String newNotes) {
+//
+//	    StudySession session = findSessionById(id);
+//
+//	    if (session == null) {
+//	        return false;
+//	    }
+//
+//	    session.setNotes(newNotes);
+//	    return true;
+//	}
 	
 	public boolean deleteSession(int id) {
 	    StudySession session = findSessionById(id);

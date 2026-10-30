@@ -34,6 +34,13 @@ public class ScoreService {
 //        }
 //    }
 	
+	public boolean hasScoresForSkill(String skill) {
+
+	    List<Integer> skillScores = scores.get(skill);
+
+	    return skillScores != null && !skillScores.isEmpty();
+	}
+	
 	public void viewScores() {
 	    if (scores.isEmpty()) {
 	        System.out.println("No practice scores recorded.");
@@ -63,11 +70,15 @@ public class ScoreService {
 	    return (double) total / skillScores.size();
 	}
 	
+	
+	
 	public void viewAverageScores() {
 	    System.out.println("Reading Average: " + getAverageScore("Reading"));
 	    System.out.println("Listening Average: " + getAverageScore("Listening"));
 	    System.out.println("Speaking Average: " + getAverageScore("Speaking"));
 	    System.out.println("Writing Average: " + getAverageScore("Writing"));
 	}
+	
+	
 
 }

@@ -23,12 +23,18 @@ public class ProgressService {
 	    double highestAverage = -1;
 
 	    for (String skill : skills) {
+	    	 if (!scoreService.hasScoresForSkill(skill)) {
+	             continue;
+	         }
 	        double average = scoreService.getAverageScore(skill);
 
 	        if (average > highestAverage) {
 	            highestAverage = average;
 	            strongestSkill = skill;
 	        }
+	    }
+	    if (strongestSkill == null) {
+	        return "No scores recorded";
 	    }
 
 	    return strongestSkill;
@@ -37,8 +43,13 @@ public class ProgressService {
 	public String getWeakestSkill() {
 	    String weakestSkill = null;
 	    double lowestAverage = Double.MAX_VALUE;
+	    
+	    
 
 	    for (String skill : skills) {
+			  if (!scoreService.hasScoresForSkill(skill)) {
+		          continue;
+		      }
 	        double average = scoreService.getAverageScore(skill);
 
 	        if (average < lowestAverage) {
@@ -46,8 +57,22 @@ public class ProgressService {
 	            weakestSkill = skill;
 	        }
 	    }
+	    if (weakestSkill == null) {
+	        return "No scores recorded";
+	    }
 
 	    return weakestSkill;
+	}
+	
+	private String getAverageDisplay(String skill) {
+
+	    if (!scoreService.hasScoresForSkill(skill)) {
+	        return "No scores recorded";
+	    }
+
+	    return String.valueOf(
+	            scoreService.getAverageScore(skill)
+	    );
 	}
 	
 	public void viewProgressReport() {
@@ -64,17 +89,25 @@ public class ProgressService {
 
 	    System.out.println();
 
-	    System.out.println("Reading Average: "
-	            + scoreService.getAverageScore("Reading"));
+	    System.out.println(
+	            "Reading Average: "
+	            + getAverageDisplay("Reading")
+	    );
 
-	    System.out.println("Listening Average: "
-	            + scoreService.getAverageScore("Listening"));
+	    System.out.println(
+	            "Listening Average: "
+	            + getAverageDisplay("Listening")
+	    );
 
-	    System.out.println("Speaking Average: "
-	            + scoreService.getAverageScore("Speaking"));
+	    System.out.println(
+	            "Speaking Average: "
+	            + getAverageDisplay("Speaking")
+	    );
 
-	    System.out.println("Writing Average: "
-	            + scoreService.getAverageScore("Writing"));
+	    System.out.println(
+	            "Writing Average: "
+	            + getAverageDisplay("Writing")
+	    );
 
 	    System.out.println();
 
