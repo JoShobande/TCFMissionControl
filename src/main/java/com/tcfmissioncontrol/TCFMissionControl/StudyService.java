@@ -41,7 +41,6 @@ public class StudyService {
 	
 	public boolean updateSession(
 	        int id,
-	        String newSkill,
 	        String newDate,
 	        int newDuration,
 	        String newNotes
@@ -52,7 +51,7 @@ public class StudyService {
 	        return false;
 	    }
 
-	    session.setSkill(newSkill);
+//	    session.setSkill(newSkill);
 	    session.setDate(newDate);
 	    session.setDuration(newDuration);
 	    session.setNotes(newNotes);

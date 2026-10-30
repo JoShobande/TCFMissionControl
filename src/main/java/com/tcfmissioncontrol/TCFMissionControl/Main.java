@@ -21,7 +21,7 @@ public class Main {
     	    System.out.println("4. Exit");
 
     	    System.out.print("Enter your choice: ");
-    	    choice = scanner.nextInt();
+    	    choice = scanner.nextInt(); 
     	    switch (choice) {
 
     	    case 1: {
@@ -117,31 +117,53 @@ public class Main {
             Scanner scanner,
             StudyService studyService
     ) {
-        System.out.print("Enter session ID: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
+    	System.out.println("Select skill:");
+    	System.out.println("1. Reading");
+    	System.out.println("2. Listening");
+    	System.out.println("3. Speaking");
+    	System.out.println("4. Writing");
 
-        System.out.print("Enter skill: ");
-        String skill = scanner.nextLine();
+    	System.out.print("Enter your choice: ");
+    	int skillChoice = scanner.nextInt();
+    	scanner.nextLine();
+    	
+    	System.out.print("Enter session ID: ");
+    	int id = scanner.nextInt();
+    	scanner.nextLine();
 
-        System.out.print("Enter date: ");
-        String date = scanner.nextLine();
+    	System.out.print("Enter date: ");
+    	String date = scanner.nextLine();
 
-        System.out.print("Enter duration in minutes: ");
-        int duration = scanner.nextInt();
-        scanner.nextLine();
+    	System.out.print("Enter duration in minutes: ");
+    	int duration = scanner.nextInt();
+    	scanner.nextLine();
 
-        System.out.print("Enter notes: ");
-        String notes = scanner.nextLine();
+    	System.out.print("Enter notes: ");
+    	String notes = scanner.nextLine();
 
-        StudySession session = new StudySession(
-                id,
-                skill,
-                date,
-                duration,
-                notes
-        );
+        StudySession session;
 
+        switch (skillChoice) {
+            case 1:
+                session = new ReadingSession(id, date, duration, notes);
+                break;
+
+            case 2:
+                session = new ListeningSession(id, date, duration, notes);
+                break;
+
+            case 3:
+                session = new SpeakingSession(id, date, duration, notes);
+                break;
+
+            case 4:
+                session = new WritingSession(id, date, duration, notes);
+                break;
+
+            default:
+                System.out.println("Invalid skill selection.");
+                return;
+        }
         studyService.addSession(session);
 
         System.out.println("Study session added successfully.");
@@ -155,8 +177,8 @@ public class Main {
         int id = scanner.nextInt();
         scanner.nextLine();
 
-        System.out.print("Enter new skill: ");
-        String skill = scanner.nextLine();
+//        System.out.print("Enter new skill: ");
+//        String skill = scanner.nextLine();
 
         System.out.print("Enter new date: ");
         String date = scanner.nextLine();
@@ -170,7 +192,6 @@ public class Main {
 
         boolean updated = studyService.updateSession(
                 id,
-                skill,
                 date,
                 duration,
                 notes

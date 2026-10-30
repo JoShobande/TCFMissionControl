@@ -1,28 +1,30 @@
 package com.tcfmissioncontrol.TCFMissionControl;
 
-public class StudySession {
+public abstract class StudySession  {
 
 		private int id;
-		private String skill;
+//		private String skill;
 		private String date;
 		private int duration;
 		private String notes;
 		
-		public StudySession(int id, String skill, String date, int duration, String notes) {
+		public StudySession(int id, String date, int duration, String notes) {
 		    this.id = id;
-		    this.skill = skill;
+//		    this.skill = skill;
 		    this.date = date;
 		    this.duration = duration;
 		    this.notes = notes;
 		}
 		
+		public abstract String getSkill();
+		
 		public int getId() {
 		    return id;
 		}
 
-		public String getSkill() {
-		    return skill;
-		}
+//		public String getSkill() {
+//		    return skill;
+//		}
 
 		public String getDate() {
 		    return date;
@@ -36,9 +38,9 @@ public class StudySession {
 		    return notes;
 		}
 		
-		public void setSkill(String skill) {
-		    this.skill = skill;
-		}
+//		public void setSkill(String skill) {
+//		    this.skill = skill;
+//		}
 
 		public void setDate(String date) {
 		    this.date = date;
@@ -55,7 +57,7 @@ public class StudySession {
 		@Override
 		public String toString() {
 		    return "ID: " + id +
-		            "\nSkill: " + skill +
+		            "\nSkill: " + getSkill() +
 		            "\nDate: " + date +
 		            "\nDuration: " + duration + " minutes" +
 		            "\nNotes: " + notes;
